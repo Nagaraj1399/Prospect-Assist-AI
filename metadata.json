@@ -1,0 +1,6 @@
+{
+  "name": "Apex Vault & Trust",
+  "description": "Core Identity & Financial Intelligence Gateway - Dual-channel verification and deep underwriting analysis engines for home, mortgage, personal, and auto loans.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

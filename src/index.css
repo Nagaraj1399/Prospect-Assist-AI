@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+.theme-light {
+  /* Dynamic slate color inversion for perfect light-mode conversion */
+  --color-slate-950: #ffffff !important;
+  --color-slate-900: #f8fafc !important; /* slate-50 */
+  --color-slate-850: #f1f5f9 !important; /* slate-100 */
+  --color-slate-800: #cbd5e1 !important; /* slate-250/300 */
+  --color-slate-700: #94a3b8 !important; /* slate-400 */
+  --color-slate-600: #64748b !important; /* slate-500 */
+  --color-slate-500: #475569 !important; /* slate-600 */
+  --color-slate-400: #334155 !important; /* slate-700 */
+  --color-slate-300: #1e293b !important; /* slate-800 */
+  --color-slate-200: #0f172a !important; /* slate-900 */
+  --color-slate-100: #020617 !important; /* slate-950 */
+  --color-slate-50: #020617 !important;
+
+  /* Invert core white/black */
+  --color-white: #020617 !important;
+  --color-black: #ffffff !important;
+
+  /* Adjust primary action colors for crisp light contrast */
+  --color-blue-950: #eff6ff !important;
+  --color-blue-900: #dbeafe !important;
+  --color-blue-800: #bfdbfe !important;
+  --color-blue-700: #3b82f6 !important;
+  --color-blue-600: #1d4ed8 !important;
+  --color-blue-500: #1e3a8a !important;
+
+  --color-emerald-950: #ecfdf5 !important;
+  --color-emerald-900: #d1fae5 !important;
+  --color-emerald-800: #a7f3d0 !important;
+  --color-emerald-500: #047857 !important;
+  --color-emerald-400: #065f46 !important;
+
+  --color-amber-950: #fffbeb !important;
+  --color-amber-900: #fef3c7 !important;
+  --color-amber-500: #b45309 !important;
+  --color-amber-400: #78350f !important;
+
+  background-color: #f8fafc !important;
+  color: #020617 !important;
+}
+
+/* Map specific hardcoded design assets */
+.theme-light [class*="bg-slate-950/20"],
+.theme-light [class*="bg-slate-900/50"],
+.theme-light [class*="bg-slate-950/60"] {
+  background-color: rgba(241, 245, 249, 0.85) !important;
+}
+
+.theme-light [class*="text-[#00D4B2]"],
+.theme-light [class*="text-[#00E5FF]"] {
+  color: #047857 !important; /* High contrast green-teal */
+}
+
+.theme-light [class*="bg-[#00D4B2]"],
+.theme-light [class*="bg-[#00E5FF]"] {
+  background-color: #047857 !important;
+  color: #ffffff !important;
+}
+
+.theme-light [class*="border-[#00D4B2]"] {
+  border-color: #047857 !important;
+}
+
+.theme-light [class*="bg-[#0c0f17]"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+.theme-light [class*="bg-[#0A2540]"] {
+  background-color: #1e3a8a !important;
+  color: #ffffff !important;
+}
+
+.theme-light [class*="text-slate-500"] {
+  color: #475569 !important; /* Darken subtitle labels */
+}
+
+/* Enhance form elements readability */
+.theme-light input,
+.theme-light select,
+.theme-light textarea {
+  border-color: #94a3b8 !important;
+  color: #020617 !important;
+}
+
+/* Format tables */
+.theme-light th {
+  background-color: #e2e8f0 !important;
+  color: #020617 !important;
+}
+
+/* Ensure actions keep high legibility */
+.theme-light button[type="submit"],
+.theme-light .bg-blue-600 {
+  color: #ffffff !important;
+}
+
+.theme-light [class*="bg-gradient-to-"] {
+  background-image: none !important;
+  background-color: #ffffff !important;
+}

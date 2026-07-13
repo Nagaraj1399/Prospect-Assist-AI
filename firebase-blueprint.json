@@ -1,0 +1,257 @@
+{
+  "entities": {
+    "Decision": {
+      "title": "Decision",
+      "description": "Risk assessment and credit underwriting decisions made by bank managers.",
+      "type": "object",
+      "properties": {
+        "borrowerId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Unique alphanumeric ID of the borrower profile."
+        },
+        "borrowerName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Full legal name of the borrower."
+        },
+        "decision": {
+          "type": "string",
+          "enum": ["APPROVED", "REJECTED", "MODIFY_TERMS"],
+          "description": "Underwriting credit decision rendered."
+        },
+        "targetEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "The customer's email address."
+        },
+        "proposedEmi": {
+          "type": "number",
+          "description": "The proposed monthly EMI amount."
+        },
+        "loanType": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Type of loan (e.g. Home Loan, Personal Loan)."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The exact date and time the decision was rendered."
+        }
+      },
+      "required": ["borrowerId", "borrowerName", "decision", "targetEmail", "proposedEmi", "loanType", "timestamp"]
+    },
+    "Repayment": {
+      "title": "Repayment",
+      "description": "Repayment transaction recorded from the client application.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Email ID of the user performing the repayment."
+        },
+        "userName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Full name of the user."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The transaction repayment amount."
+        },
+        "transactionId": {
+          "type": "string",
+          "description": "The unique reference string for the transaction."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the repayment was initiated."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAILED", "PENDING"],
+          "description": "Status of the repayment transaction."
+        }
+      },
+      "required": ["userId", "userName", "amount", "transactionId", "timestamp", "status"]
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile metadata stored securely in Firestore.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The user's unique identifier (from Auth)."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's corporate or customer email address."
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The user's full name."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "The user's contact number."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the profile was created."
+        },
+        "hasReceivedWelcome": {
+          "type": "boolean",
+          "description": "Flag indicating if welcome sequence was triggered."
+        },
+        "role": {
+          "type": "string",
+          "description": "The user's role (e.g., CLIENT, CUSTOMER, EMPLOYEE)."
+        },
+        "passwordHash": {
+          "type": "string",
+          "description": "Password credential hash (only for legacy email/password nodes)."
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "PasswordReset": {
+      "title": "PasswordReset",
+      "description": "Active password reset token details.",
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Reset OTP or secret token."
+        },
+        "expiresAt": {
+          "type": "number",
+          "description": "Expiration epoch timestamp in milliseconds."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Associated user contact phone number."
+        }
+      },
+      "required": ["token", "expiresAt"]
+    },
+    "OtpStore": {
+      "title": "OtpStore",
+      "description": "Active web verification OTP data.",
+      "type": "object",
+      "properties": {
+        "otp": {
+          "type": "string",
+          "description": "The 6-digit numeric OTP token."
+        },
+        "expiresAt": {
+          "type": "number",
+          "description": "Expiration epoch timestamp in milliseconds."
+        },
+        "name": {
+          "type": "string",
+          "description": "Proposed user full name."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Associated user phone number."
+        },
+        "role": {
+          "type": "string",
+          "description": "Target registration or access role."
+        },
+        "passwordHash": {
+          "type": "string",
+          "description": "Target password credential hash."
+        },
+        "action": {
+          "type": "string",
+          "description": "The trigger action (e.g., register, otp_login)."
+        }
+      },
+      "required": ["otp", "expiresAt"]
+    },
+    "TransientOtp": {
+      "title": "TransientOtp",
+      "description": "Active simulated mobile/email OTP sessions.",
+      "type": "object",
+      "properties": {
+        "code_hash": {
+          "type": "string",
+          "description": "Plaintext token code or MD5 code hash."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp indicating token dispatch."
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp indicating expiration."
+        },
+        "attempts": {
+          "type": "number",
+          "description": "Number of consecutive incorrect entry attempts."
+        }
+      },
+      "required": ["code_hash", "expiresAt", "attempts"]
+    },
+    "Mail": {
+      "title": "Mail",
+      "description": "Outbound email entries managed by Trigger Email extension.",
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "string",
+          "format": "email",
+          "description": "Recipient email address."
+        },
+        "message": {
+          "type": "object",
+          "description": "Email content details."
+        },
+        "template": {
+          "type": "object",
+          "description": "Optional email template configuration."
+        }
+      },
+      "required": ["to"]
+    }
+  },
+  "firestore": {
+    "decisions/{decisionId}": {
+      "schema": "Decision",
+      "description": "Collection of credit decision audit logs."
+    },
+    "repayments/{repaymentId}": {
+      "schema": "Repayment",
+      "description": "Collection of repayment transaction logs."
+    },
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles database."
+    },
+    "passwordResets/{email}": {
+      "schema": "PasswordReset",
+      "description": "Active password reset tokens database."
+    },
+    "otpStore/{email}": {
+      "schema": "OtpStore",
+      "description": "Web user OTP active verifications database."
+    },
+    "transient_otps/{phoneOrEmail}": {
+      "schema": "TransientOtp",
+      "description": "Active phone or email verification tokens for Flutter app sandbox."
+    },
+    "mail/{mailId}": {
+      "schema": "Mail",
+      "description": "Outbound emails sent using Trigger Email extension."
+    }
+  }
+}

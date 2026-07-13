@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global safety net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Decisions collection rules
+    match /decisions/{decisionId} {
+      allow create: if isSignedIn() && isValidId(decisionId) && isValidDecision(incoming());
+      allow read: if isSignedIn();
+    }
+
+    // Repayments collection rules
+    match /repayments/{repaymentId} {
+      allow create: if isSignedIn() && isValidId(repaymentId) && isValidRepayment(incoming());
+      allow read: if isSignedIn();
+    }
+
+    // Users collection rules
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    // Password resets (Admin-only client bypass)
+    match /passwordResets/{email} {
+      allow read, write: if true;
+    }
+
+    // OTP Store (Admin-only client bypass)
+    match /otpStore/{email} {
+      allow read, write: if true;
+    }
+
+    // Transient OTPs (Used for sandbox OTP simulation in client)
+    match /transient_otps/{phoneOrEmail} {
+      allow read, write: if true;
+    }
+
+    // Mail collection rules
+    match /mail/{mailId} {
+      allow create: if isSignedIn() && isValidMail(incoming());
+    }
+  }
+
+  // Global Helpers
+  function isSignedIn() {
+    return request.auth != null;
+  }
+
+  function incoming() {
+    return request.resource.data;
+  }
+
+  function existing() {
+    return resource.data;
+  }
+
+  function isValidId(id) {
+    return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+  }
+
+  // Entity Validations
+  function isValidDecision(data) {
+    return data.keys().hasAll(['borrowerId', 'borrowerName', 'decision', 'targetEmail', 'proposedEmi', 'loanType', 'timestamp'])
+      && data.keys().size() == 7
+      && data.borrowerId is string && data.borrowerId.size() <= 128
+      && data.borrowerName is string && data.borrowerName.size() <= 100
+      && data.decision in ['APPROVED', 'REJECTED', 'MODIFY_TERMS']
+      && data.targetEmail is string && data.targetEmail.size() <= 100
+      && data.proposedEmi is number
+      && data.loanType is string && data.loanType.size() <= 50
+      && data.timestamp is string && data.timestamp.size() <= 50;
+  }
+
+  function isValidRepayment(data) {
+    return data.keys().hasAll(['userId', 'userName', 'amount', 'transactionId', 'timestamp', 'status'])
+      && data.keys().size() == 6
+      && data.userId is string && data.userId.size() <= 100
+      && data.userName is string && data.userName.size() <= 100
+      && data.amount is number
+      && data.transactionId is string && data.transactionId.size() <= 128
+      && data.timestamp is string && data.timestamp.size() <= 50
+      && data.status in ['SUCCESS', 'FAILED', 'PENDING'];
+  }
+
+  // Simple mail entity schema check
+  function isValidMail(data) {
+    return data.keys().hasAll(['to', 'message'])
+      && data.to is string && data.to.size() <= 100;
+  }
+}
